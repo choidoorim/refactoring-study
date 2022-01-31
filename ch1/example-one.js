@@ -24,6 +24,8 @@ const plays = {
     "othello": {"name": "Othello", "type":  "tragedy"}
 }
 
+const playFor = (aPerformace) => plays[aPerformace.playID];
+
 const amountFor = (aPerformance, play) => {
     let result = 0;
 
@@ -37,7 +39,7 @@ const amountFor = (aPerformance, play) => {
         case "comedy":
             result = 30000;
             if(aPerformance.audience > 20) {
-                result += 10000 + 500 * (perf.audience - 20);
+                result += 10000 + 500 * (aPerformance.audience - 20);
             }
             result += 300 * aPerformance.audience
             break;
@@ -54,7 +56,7 @@ const statement = (invoice, plays) => {
     let result = `청구 내역 (고객명: ${invoice.customer})\n`;
 
     for (const perf of invoice.performances) {
-        const play = plays[perf.playID];
+        const play = playFor(perf);
         // thisAmount 의 값을 추출할 때는 amountFor 메서드를 사용한다.
         let thisAmount = amountFor(perf, play);
         // 포인트 적립
