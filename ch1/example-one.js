@@ -68,15 +68,17 @@ const statement = (invoice) => {
     let volumeCredits = 0;
     let result = `청구 내역 (고객명: ${invoice.customer})\n`;
 
+    const format = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 }).format;
+
     for (const perf of invoice.performances) {
         // 포인트 적립
         volumeCredits += volumeCreditsFor(perf);
         //청구 내역 출력
-        result += ` ${playFor(perf).name}: \$${(amountFor(perf)/100)} (${perf.audience}석)\n`;
+        result += ` ${playFor(perf).name}: ${format(amountFor(perf)/100)} (${perf.audience}석)\n`;
         totalAmount += amountFor(perf);
     }
 
-    result += `총액: \$${(totalAmount/100)}\n`;
+    result += `총액: ${format(totalAmount/100)}\n`;
     result += `적립 포인트: ${volumeCredits}점\n`;
     return result;
 }
