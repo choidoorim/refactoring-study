@@ -61,14 +61,14 @@ const volumeCreditsFor = (perf) => {
     return result;
 }
 
+const format = (aNumber) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 }).format(aNumber);
+
 // playFor 함수를 통해 plays 의 값을 읽어온다.
 // thisAmount 의 값을 추출할 때는 amountFor 메서드를 사용한다.
 const statement = (invoice) => {
     let totalAmount = 0;
     let volumeCredits = 0;
     let result = `청구 내역 (고객명: ${invoice.customer})\n`;
-
-    const format = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 }).format;
 
     for (const perf of invoice.performances) {
         // 포인트 적립
