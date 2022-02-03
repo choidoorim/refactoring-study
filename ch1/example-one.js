@@ -1,4 +1,4 @@
-const invoices = [
+const invoices =
     {
         "customer": "BigCo",
         "performances": [
@@ -16,7 +16,7 @@ const invoices = [
             }
         ]
     }
-]
+
 
 const plays = {
     "hamlet": {"name": "Hamlet", "type":  "tragedy"},
@@ -63,24 +63,35 @@ const volumeCreditsFor = (perf) => {
 
 const format = (aNumber) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 }).format(aNumber);
 
-// playFor 함수를 통해 plays 의 값을 읽어온다.
-// thisAmount 의 값을 추출할 때는 amountFor 메서드를 사용한다.
-const statement = (invoice) => {
-    let totalAmount = 0;
-    let volumeCredits = 0;
-    let result = `청구 내역 (고객명: ${invoice.customer})\n`;
-
+const totalVolumeCredits = (invoice) => {
+    let result = 0;
     for (const perf of invoice.performances) {
-        // 포인트 적립
-        volumeCredits += volumeCreditsFor(perf);
-        //청구 내역 출력
-        result += ` ${playFor(perf).name}: ${format(amountFor(perf)/100)} (${perf.audience}석)\n`;
-        totalAmount += amountFor(perf);
+        result += volumeCreditsFor(perf);
     }
-
-    result += `총액: ${format(totalAmount/100)}\n`;
-    result += `적립 포인트: ${volumeCredits}점\n`;
     return result;
 }
 
-console.log(statement(invoices[0], plays))
+const totalAmount = (invoice) => {
+    let result = 0;
+    for (const perf of invoice.performances) {
+        result += amountFor(perf);
+    }
+    return result;
+}
+
+// playFor 함수를 통해 plays 의 값을 읽어온다.
+// thisAmount 의 값을 추출할 때는 amountFor 메서드를 사용한다.
+const statement = (invoice) => {
+    let result = `청구 내역 (고객명: ${invoice.customer})\n`;
+
+    for (const perf of invoice.performances) {
+        //청구 내역 출력
+        result += ` ${playFor(perf).name}: ${format(amountFor(perf)/100)} (${perf.audience}석)\n`;
+    }
+
+    result += `총액: ${format(totalAmount(invoice)/100)}\n`;
+    result += `적립 포인트: ${totalVolumeCredits(invoice)}점\n`;
+    return result;
+}
+
+console.log(statement(invoices))
