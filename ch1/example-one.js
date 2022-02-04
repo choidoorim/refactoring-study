@@ -79,9 +79,7 @@ const totalAmount = (invoice) => {
     return result;
 }
 
-// playFor 함수를 통해 plays 의 값을 읽어온다.
-// thisAmount 의 값을 추출할 때는 amountFor 메서드를 사용한다.
-const statement = (invoice) => {
+const renderPlainText = (invoice) => {
     let result = `청구 내역 (고객명: ${invoice.customer})\n`;
 
     for (const perf of invoice.performances) {
@@ -92,6 +90,12 @@ const statement = (invoice) => {
     result += `총액: ${format(totalAmount(invoice)/100)}\n`;
     result += `적립 포인트: ${totalVolumeCredits(invoice)}점\n`;
     return result;
+}
+
+// playFor 함수를 통해 plays 의 값을 읽어온다.
+// thisAmount 의 값을 추출할 때는 amountFor 메서드를 사용한다.
+const statement = (invoice) => {
+    return renderPlainText(invoice);
 }
 
 console.log(statement(invoices))
