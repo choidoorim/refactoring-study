@@ -34,3 +34,16 @@
 ## 계산 단계와 포맷팅 단계 분리하기
 - 우선 필요한 데이터를 처리하고, 앞서 처리한 결과를 텍스트나 HTML 로 표현한다.
 
+- 중간 데이터 구조를 사용하여 필요 없는 인수들을 제거할 수 있다.
+```
+const statement = (invoice) => {
+    const statementData = {};   // 중간데이터 구조
+    statementData.customer = invoice.customer;
+    return renderPlainText(statementData);
+}
+
+const renderPlainText = (data) => {
+    let result = `청구 내역 (고객명: ${data.customer})\n`;
+    //...
+}
+```
