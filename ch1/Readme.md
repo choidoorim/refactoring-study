@@ -39,6 +39,7 @@
 const statement = (invoice) => {
     const statementData = {};   // 중간데이터 구조
     statementData.customer = invoice.customer;
+    statementData.performances = invoice.performances;
     return renderPlainText(statementData);
 }
 
