@@ -63,33 +63,33 @@ const volumeCreditsFor = (aPerformance) => {
 
 const format = (aNumber) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 }).format(aNumber);
 
-const totalVolumeCredits = (invoice) => {
+const totalVolumeCredits = (data) => {
     let result = 0;
-    for (const perf of invoice.performances) {
+    for (const perf of data.performances) {
         result += volumeCreditsFor(perf);
     }
     return result;
 }
 
-const totalAmount = (invoice) => {
+const totalAmount = (data) => {
     let result = 0;
-    for (const perf of invoice.performances) {
+    for (const perf of data.performances) {
         result += amountFor(perf);
     }
     return result;
 }
 
 //
-const renderPlainText = (data, invoice) => {
+const renderPlainText = (data) => {
     let result = `청구 내역 (고객명: ${data.customer})\n`;
 
-    for (const perf of invoice.performances) {
+    for (const perf of data.performances) {
         //청구 내역 출력
         result += ` ${playFor(perf).name}: ${format(amountFor(perf)/100)} (${perf.audience}석)\n`;
     }
 
-    result += `총액: ${format(totalAmount(invoice)/100)}\n`;
-    result += `적립 포인트: ${totalVolumeCredits(invoice)}점\n`;
+    result += `총액: ${format(totalAmount(data)/100)}\n`;
+    result += `적립 포인트: ${totalVolumeCredits(data)}점\n`;
     return result;
 }
 
@@ -98,7 +98,8 @@ const renderPlainText = (data, invoice) => {
 const statement = (invoice) => {
     const statementData = {};
     statementData.customer = invoice.customer;
-    return renderPlainText(statementData, invoice);
+    statementData.performances = invoice.performances;
+    return renderPlainText(statementData);
 }
 
 console.log(statement(invoices))
