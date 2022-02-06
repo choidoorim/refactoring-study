@@ -28,6 +28,14 @@
 ```
 
 - 지역 변수를 제거해서 얻는 가장 큰 장점은 추출 작업이 훨씬 쉬워진다. 따라서 함수 추출 전에 지역 변수부터 제거하는 것도 좋은 방법이다.
+```javascript
+//...
+//let thisAmount = amountFor(perf);
+
+//result = format(thisAmount/100);
+result = format(amountFor(perf)/100);
+//...
+```
 
 - 리팩터링으로 인한 성능 문제는 특별한 경우가 아니라면 일단 무시해도 나쁘지 않다. 잘 다듬어진 코드가 나중에 성능 개선에도 도움이 되기 때문이다.
 
