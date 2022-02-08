@@ -85,7 +85,7 @@ const renderPlainText = (data) => {
 
     for (const perf of data.performances) {
         //청구 내역 출력
-        result += ` ${playFor(perf).name}: ${format(amountFor(perf)/100)} (${perf.audience}석)\n`;
+        result += ` ${perf.play.name}: ${format(amountFor(perf)/100)} (${perf.audience}석)\n`;
     }
 
     result += `총액: ${format(totalAmount(data)/100)}\n`;
@@ -98,8 +98,15 @@ const renderPlainText = (data) => {
 const statement = (invoice) => {
     const statementData = {};
     statementData.customer = invoice.customer;
-    statementData.performances = invoice.performances;
+    statementData.performances = invoice.performances.map(enrichPerformance);
     return renderPlainText(statementData);
+
+    function enrichPerformance(aPerformance) {
+        const result = Object.assign({},  aPerformance);
+        // renderPlainText 에서 사용하는 playFor 함수 중간함수로 대체
+        result.play = playFor(aPerformance);
+        return result;
+    }
 }
 
 console.log(statement(invoices))
