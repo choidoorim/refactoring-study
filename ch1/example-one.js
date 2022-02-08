@@ -66,7 +66,7 @@ const format = (aNumber) => new Intl.NumberFormat("en-US", { style: "currency", 
 const totalVolumeCredits = (data) => {
     let result = 0;
     for (const perf of data.performances) {
-        result += volumeCreditsFor(perf);
+        result += perf.volumeCredits;
     }
     return result;
 }
@@ -74,22 +74,21 @@ const totalVolumeCredits = (data) => {
 const totalAmount = (data) => {
     let result = 0;
     for (const perf of data.performances) {
-        result += amountFor(perf);
+        result += perf.amount;
     }
     return result;
 }
 
-//
 const renderPlainText = (data) => {
     let result = `청구 내역 (고객명: ${data.customer})\n`;
 
     for (const perf of data.performances) {
         //청구 내역 출력
-        result += ` ${perf.play.name}: ${format(amountFor(perf)/100)} (${perf.audience}석)\n`;
+        result += ` ${perf.play.name}: ${format(perf.amount/100)} (${perf.audience}석)\n`;
     }
 
-    result += `총액: ${format(totalAmount(data)/100)}\n`;
-    result += `적립 포인트: ${totalVolumeCredits(data)}점\n`;
+    result += `총액: ${format(data.totalAmount/100)}\n`;
+    result += `적립 포인트: ${data.totalVolumeCredits}점\n`;
     return result;
 }
 
@@ -99,12 +98,16 @@ const statement = (invoice) => {
     const statementData = {};
     statementData.customer = invoice.customer;
     statementData.performances = invoice.performances.map(enrichPerformance);
+    statementData.totalAmount = totalAmount(statementData);
+    statementData.totalVolumeCredits = totalVolumeCredits(statementData);
     return renderPlainText(statementData);
 
     function enrichPerformance(aPerformance) {
         const result = Object.assign({},  aPerformance);
-        // renderPlainText 에서 사용하는 playFor 함수 중간함수로 대체
+        // renderPlainText 에서 사용하는 playFor, amountFor 함수 중간함수로 대체
         result.play = playFor(aPerformance);
+        result.amount = amountFor(aPerformance);
+        result.volumeCredits = volumeCreditsFor(aPerformance);
         return result;
     }
 }

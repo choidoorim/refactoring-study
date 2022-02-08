@@ -42,8 +42,8 @@ result = format(amountFor(perf)/100);
 ## 계산 단계와 포맷팅 단계 분리하기
 - 우선 필요한 데이터를 처리하고, 앞서 처리한 결과를 텍스트나 HTML 로 표현한다.
 
-- 중간 데이터 구조를 사용하여 필요 없는 인수들을 제거할 수 있다.
-```
+- 중간 데이터 구조를 사용하여 필요 없는 인수들을 제거할 수 있다. 
+```javascript
 const statement = (invoice) => {
     const statementData = {};   // 중간데이터 구조
     statementData.customer = invoice.customer;
@@ -54,5 +54,29 @@ const statement = (invoice) => {
 const renderPlainText = (data) => {
     let result = `청구 내역 (고객명: ${data.customer})\n`;
     //...
+}
+```
+
+- 데이터를 가져오는 로직과 데이터를 활용하는 로직을 나눈 뒤, 중간 데이터 구조를 통해 값을 전달한다.
+```javascript
+const renderPlainText = (data) => {
+    let result = `청구 내역 (고객명: ${data.customer})\n`;
+
+    for (const perf of data.performances) {
+        result += ` ${perf.play.name}: ${format(perf.amount/100)} (${perf.audience}석)\n`;
+    }
+
+    result += `총액: ${format(data.totalAmount/100)}\n`;
+    result += `적립 포인트: ${data.totalVolumeCredits}점\n`;
+    //...
+}
+
+const statement = (invoice) => {
+    const statementData = {};
+    statementData.customer = invoice.customer;
+    statementData.totalAmount = totalAmount(statementData);
+    statementData.totalVolumeCredits = totalVolumeCredits(statementData);
+    //...
+    return renderPlainText(statementData);
 }
 ```
