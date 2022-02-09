@@ -1,60 +1,11 @@
-const invoices =
-    {
-        "customer": "BigCo",
-        "performances": [
-            {
-                "playID": "hamlet",
-                "audience": 55
-            },
-            {
-                "playID": "as-like",
-                "audience": 35
-            },
-            {
-                "playID": "othello",
-                "audience": 40
-            }
-        ]
-    }
-
-
-const plays = {
-    "hamlet": {"name": "Hamlet", "type":  "tragedy"},
-    "as-like": {"name": "As you Like it", "type": "comedy"},
-    "othello": {"name": "Othello", "type":  "tragedy"}
-}
-
-const renderPlainText = (data) => {
-    let result = `청구 내역 (고객명: ${data.customer})\n`;
-
-    for (const perf of data.performances) {
-        //청구 내역 출력
-        result += ` ${perf.play.name}: ${usd(perf.amount/100)} (${perf.audience}석)\n`;
-    }
-
-    result += `총액: ${usd(data.totalAmount/100)}\n`;
-    result += `적립 포인트: ${data.totalVolumeCredits}점\n`;
+// 데이터를 처리하는 로직들
+export default function createStatementData(invoice, plays) {
+    const result = {};
+    result.customer = invoice.customer;
+    result.performances = invoice.performances.map(enrichPerformance);
+    result.totalAmount = totalAmount(result);
+    result.totalVolumeCredits = totalVolumeCredits(result);
     return result;
-
-    function usd (aNumber) {
-        return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 }).format(aNumber);
-    }
-
-}
-
-// playFor 함수를 통해 plays 의 값을 읽어온다.
-// thisAmount 의 값을 추출할 때는 amountFor 메서드를 사용한다.
-const statement = (invoice, plays) => {
-    return renderPlainText(createStatementData(invoice));
-
-    function createStatementData(invoice) {
-        const result = {};
-        result.customer = invoice.customer;
-        result.performances = invoice.performances.map(enrichPerformance);
-        result.totalAmount = totalAmount(result);
-        result.totalVolumeCredits = totalVolumeCredits(result);
-        return result
-    }
 
     function enrichPerformance(aPerformance) {
         const result = Object.assign({},  aPerformance);
@@ -120,5 +71,3 @@ const statement = (invoice, plays) => {
         return result;
     }
 }
-
-console.log(statement(invoices, plays))
