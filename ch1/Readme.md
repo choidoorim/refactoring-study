@@ -80,3 +80,7 @@ const statement = (invoice) => {
     return renderPlainText(statementData);
 }
 ```
+
+- 코드의 길이가 길어질 수도 있지만, 기능 별로 모듈화를 하게 된다면 각 부분들의 하는 일을 알 수 있고, 돌아가는 과정을 파악하기 쉬워진다는 장점이 있다.
+
+## 다형성을 활용해 계산 코드 재구성하기

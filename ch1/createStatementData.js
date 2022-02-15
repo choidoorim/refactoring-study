@@ -1,4 +1,11 @@
 // 데이터를 처리하는 로직들
+class PerformanceCalculator {
+    constructor(aPerformance, aPlay) {
+      this.performance = aPerformance;
+      this.play = aPlay;
+    }
+}
+
 export default function createStatementData(invoice, plays) {
     const result = {};
     result.customer = invoice.customer;
@@ -8,6 +15,9 @@ export default function createStatementData(invoice, plays) {
     return result;
 
     function enrichPerformance(aPerformance) {
+        // NOTE: 공연료 계산기를 만들어주는 객체
+        const calculator = new PerformanceCalculator(aPerformance, playFor(aPerformance));
+        console.log(calculator);
         const result = Object.assign({},  aPerformance);
         // renderPlainText 에서 사용하는 playFor, amountFor 함수 중간함수로 대체
         result.play = playFor(aPerformance);
