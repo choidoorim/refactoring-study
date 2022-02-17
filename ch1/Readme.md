@@ -84,3 +84,51 @@ const statement = (invoice) => {
 - 코드의 길이가 길어질 수도 있지만, 기능 별로 모듈화를 하게 된다면 각 부분들의 하는 일을 알 수 있고, 돌아가는 과정을 파악하기 쉬워진다는 장점이 있다.
 
 ## 다형성을 활용해 계산 코드 재구성하기
+```javascript
+// Polymorphism
+class PerformanceCalculator {
+    constructor(aPerformance, aPlay) {
+      this.performance = aPerformance;
+      this.play = aPlay;
+    }
+
+    get amount() {
+        //...
+    }
+
+    get volumeCreditsFor() {
+        //...
+    }
+}
+
+class TragedyCalculator extends PerformanceCalculator {
+    get amount() {
+        //...
+    }
+}
+
+class ComedyCalculator extends PerformanceCalculator {
+    get amount() {
+        //...
+    }
+}
+
+```
+
+- 함수를 이용해서 객체를 생성한다면 상황에 따라 어떤 함수를 생성할 지 선택할 수 있다.
+
+- 조건부 로직을 다형성으로 사용할 수 있다.
+```javascript
+function createPerformanceCalculator(aPerformance, aPlay) {
+    switch (aPlay.type) {
+        case "tragedy": return new TragedyCalculator(aPerformance, aPlay);
+        case "comedy": return new ComedyCalculator(aPerformance, aPlay);
+        //...
+    }
+}
+```
+이렇게 된다면 새로운 장르가 추가된다면 해당 장르의 서브 클래스를 작성하고 ```createPerformanceCalculator``` 메서드에 추가해주기만 하면된다.
+
+#### 좋은 코드를 확인할 수 있는 방법은  '얼마나 수정하기 쉬운가' 이다.
+#### 건강한 코드는 생산성을 향상시키고, 필요한 기능을 더 빠르고 저렴한 비용으로 제공해준다.
+
